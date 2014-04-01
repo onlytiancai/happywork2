@@ -1,0 +1,4 @@
+web.py>=0.36
+mock>=1.0.1
+nose-cov>=1.6
+flake8>=1.5
