@@ -1,7 +1,8 @@
 VIRTUALENV?=virtualenv
 
-init:
-	echo "ddddddddd"
+cleanup:
+	find . -name '*.pyc' -delete
+	find . -name 'sessions' | xargs rm -rf 
 
 runtest:
 	set -e
