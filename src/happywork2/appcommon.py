@@ -8,14 +8,14 @@
 - 使用session
 - 网站favicon.ico的处理
 - 拦截网站所有500错误并记录日志，或者发送邮件给开发人员
-- web.py程序的单元测试
 
 '''
+import os
 import web
 import logging
 import logging.handlers
 
-from .. import settings
+from happywork2 import settings
 
 ########## Initialization
 
@@ -52,16 +52,17 @@ def init_logger():
 init_logger()
 
 
-def log_exception(op_name, rethrow=True):
+def log_exception(op_name=None, rethrow=True):
     '''自动记录异常信息的修饰器，op_name:操作名称，
     rethrow：捕获异常后是否重新抛出'''
     def inner(fun):
         def inner2(*args, **kargs):
+            fun_name = op_name if op_name is not None else fun.__name__
             try:
                 return fun(*args, **kargs)
             except:
                 logger.exception("%s error:args=%s, kargs=%s",
-                                 op_name, args, kargs)
+                                 fun_name, args, kargs)
                 if rethrow:
                     raise
         return inner2
@@ -92,3 +93,7 @@ def internalerror():
 def session_hook():
     '让每个web action都能取到session'
     web.ctx.session = session
+
+_base_dir = os.path.dirname(__file__)
+_tpl_dir = os.path.join(_base_dir, 'templates')
+base_render = web.template.render(_tpl_dir, base='layout')

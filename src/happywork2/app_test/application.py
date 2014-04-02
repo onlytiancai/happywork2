@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import web
 
-from ..common import bootstrap
+from happywork2 import appcommon
 
 
 class favicon(object):
@@ -15,13 +15,13 @@ class index(object):
     '首页'
     def GET(self):
         client_ip = web.ctx.env.get('HTTP_X_REAL_IP', web.ctx.ip)
-        bootstrap.logger.debug("recv /index request: client_ip: %s", client_ip)
+        appcommon.logger.debug("recv /index request: client_ip: %s", client_ip)
         return "Hello word."
 
 
 class raise_exception(object):
     '测试一个500错误页'
-    @bootstrap.log_exception("raise action")
+    @appcommon.log_exception("raise action")
     def GET(self):
         raise Exception("opps")
 
@@ -35,6 +35,6 @@ class login(object):
 
 class admin(object):
     '需要登录后才能访问'
-    @bootstrap.ensure_login
+    @appcommon.ensure_login
     def GET(self):
         return "welcome %s." % web.ctx.session.username

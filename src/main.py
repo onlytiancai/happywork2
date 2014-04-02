@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from happywork2 import webmain
+from happywork2 import application
 
-app = webmain.app
+app = application.app
 wsgiapp = app.wsgifunc()
 
 if __name__ == '__main__':

@@ -2,9 +2,9 @@ import init
 init.init()
 
 
-from happywork2 import webmain
+from happywork2 import application
 
-app = webmain.app
+app = application.app
 
 
 def test_index():
