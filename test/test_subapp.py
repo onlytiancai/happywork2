@@ -1,7 +1,7 @@
 import init
 init.init()
 
-from happywork2 import application
+import application
 app = application.app
 
 

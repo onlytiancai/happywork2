@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import web
 
-from happywork2 import appcommon
+import appcommon
 
 
 class favicon(object):

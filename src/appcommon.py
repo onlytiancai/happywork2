@@ -15,7 +15,7 @@ import web
 import logging
 import logging.handlers
 
-from happywork2 import settings
+import settings
 
 ########## Initialization
 
@@ -97,3 +97,43 @@ def session_hook():
 _base_dir = os.path.dirname(__file__)
 _tpl_dir = os.path.join(_base_dir, 'templates')
 base_render = web.template.render(_tpl_dir, base='layout')
+
+
+class ValidationError(Exception):
+    '数据校验错误'
+    pass
+
+
+class Validator(object):
+    '''校验表单数据
+    '''
+    rules = []
+
+    def __init__(self, data):
+        self.data = data
+
+    def addrule(self, name, **kargs):
+        kargs.update(name=name)
+        self.rules.append(web.storage(kargs))
+
+    def check(self):
+        for rule in self.rules:
+            self._check_rule(rule)
+
+    def _check_rule(self, rule):  # NOQA
+        if 'required' in rule and rule.required:
+            if rule.name not in self.data:
+                raise ValidationError('%s is Null' % rule.name)
+
+        if 'minlen' in rule:
+            minlen = int(rule.minlen)
+            if rule.name in self.data:
+                if len(self.data[rule.name]) < minlen:
+                    raise ValidationError('%s min len is %s' % (rule.name,
+                                                                minlen))
+        if 'maxlen' in rule:
+            maxlen = int(rule.maxlen)
+            if rule.name in self.data:
+                if len(self.data[rule.name]) > maxlen:
+                    raise ValidationError('%s max len is %s' % (rule.name,
+                                                                maxlen))
